@@ -41,6 +41,8 @@ public class GreenAdapter extends RecyclerView.Adapter<GreenAdapter.NumberViewHo
 
     private int mNumberItems;
 
+    private static int viewHolderCount;
+
     /**
      * Constructor for GreenAdapter that accepts a number of items to display and the specification
      * for the ListItemClickListener.
@@ -49,6 +51,7 @@ public class GreenAdapter extends RecyclerView.Adapter<GreenAdapter.NumberViewHo
      */
     public GreenAdapter(int numberOfItems) {
         mNumberItems = numberOfItems;
+        viewHolderCount = 0;
     }
 
     /**
@@ -72,6 +75,17 @@ public class GreenAdapter extends RecyclerView.Adapter<GreenAdapter.NumberViewHo
 
         View view = inflater.inflate(layoutIdForListItem, viewGroup, shouldAttachToParentImmediately);
         NumberViewHolder viewHolder = new NumberViewHolder(view);
+
+        viewHolder.viewHolderIndex.setText("ViewHolder index: " +viewHolderCount);
+
+        int backgroundColorForviewHolder = ColorUtils
+                .getViewHolderBackgroundColorFromInstance(context, viewHolderCount);
+
+        viewHolder.itemView.setBackgroundColor(backgroundColorForviewHolder);
+
+        viewHolderCount++;
+
+        Log.d(TAG,"onCreateViewHolder : number of view holder created: " +viewHolderCount);
 
         return viewHolder;
     }
@@ -111,6 +125,8 @@ public class GreenAdapter extends RecyclerView.Adapter<GreenAdapter.NumberViewHo
         // Will display the position in the list, ie 0 through getItemCount() - 1
         TextView listItemNumberView;
 
+        TextView viewHolderIndex;
+
         /**
          * Constructor for our ViewHolder. Within this constructor, we get a reference to our
          * TextViews and set an onClickListener to listen for clicks. Those will be handled in the
@@ -122,6 +138,7 @@ public class GreenAdapter extends RecyclerView.Adapter<GreenAdapter.NumberViewHo
             super(itemView);
 
             listItemNumberView = (TextView) itemView.findViewById(R.id.tv_item_number);
+            viewHolderIndex = (TextView)itemView.findViewById(R.id.tv_view_holder_instance);
         }
 
         /**
